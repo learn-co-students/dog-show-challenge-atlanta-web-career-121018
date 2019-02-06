@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", setupPage)
 let dogTable = document.querySelector('#table-body')
+let form = document.querySelector('#dog-form')
 
 function setupPage() {
     renderAllDogs()
@@ -7,7 +8,7 @@ function setupPage() {
 
 function renderAllDogs() { 
     dogTable.innerHTML = ""
-    let url = `http://localhost:3000/dogs`;
+    const url = `http://localhost:3000/dogs`;
     getDog(url).then(function (data) {
         data.forEach(renderDog)
     })
@@ -36,8 +37,42 @@ function renderDog(dog) {
         let buttonContainer = document.createElement('td')
             let editButton = document.createElement('button')
             editButton.textContent = 'Edit Dog'
+            editButton.addEventListener('click', function() {updateDog(dog)})
             buttonContainer.appendChild(editButton)
         element.appendChild(buttonContainer)
     
     dogTable.appendChild(element)
+} 
+
+function updateDog(dog) {
+    // console.log(dog, "in the update fn")
+    form.name.value = dog.name
+    form.breed.value = dog.breed
+    form.sex.value = dog.sex 
+
+    form.addEventListener('submit', function() {patchDog(dog)})
 }
+
+function patchDog(dog) {
+    // console.log(dog, "in the patch fn")
+    event.preventDefault()
+    dog.name = event.target.name.value
+    dog.breed = event.target.breed.value
+    dog.sex = event.target.sex.value
+
+    const url2 = `http://localhost:3000/dogs/${dog.id}`
+    fetch(url2, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+        },
+        body: JSON.stringify({
+            name: dog.name,
+            breed: dog.breed,
+            sex: dog.sex
+        })
+    })
+    renderAllDogs()
+    document.location.reload() //refreshes browser and clears form 
+} 
