@@ -1,4 +1,7 @@
+
+console.log('%c Welcome to The Dog Show!', 'color: firebrick')
 document.addEventListener('DOMContentLoaded', setupPage)
+
 
 function updateDog (dog){
     event.preventDefault();
@@ -32,6 +35,7 @@ function updateDog (dog){
 
 
 function addEditListener (dog){
+    console.log('%c Form Event Listener has been added!', 'color: green')
     let form = document.querySelector('#dog-form')
     form.addEventListener('submit', function() {updateDog(dog)})
 
@@ -44,7 +48,7 @@ function addEditListener (dog){
 
 
 function dogView(dog){
-    console.log(dog)
+    // console.log(dog)
     let tableRow = document.createElement('tr')
     tableRow.className = 'dog-row'
     tableRow.id = dog.id
@@ -83,6 +87,7 @@ function makeDogs(dog) {
     let table = document.querySelector('#table-body')
     let row = dogView(dog)
     table.appendChild(row)
+    console.log('%c Successfully made dogs!', 'color: green')
 }
 
 function populateDogs(){
@@ -94,11 +99,13 @@ function populateDogs(){
 function getDogs(){
     const URL = "http://localhost:3000/dogs"
     return fetch(URL)
-    .catch(error => console.log(error))
+    .catch(error => console.log('%c Error Caught when fetching dogs from DataBase', 'color: firebrick'))
     .then(res => res.json())
     .then(res => res)
+    console.log('%c Successfully fetched dogs from DataBase', 'color: green')
 }
 
 function setupPage() {
     populateDogs()
+    console.log('%c Successfully ran Page Set-Up', 'color: green')
 }
